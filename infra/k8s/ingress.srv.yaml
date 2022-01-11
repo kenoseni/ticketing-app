@@ -1,0 +1,22 @@
+# this is used to modify the configuration of the ingress contoller!
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  # helps ingress controller to understand we want to feed it some routing rules
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # to use a wildcard in the path, add this settings
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - host: ticketing.com
+      http:
+        paths:
+          - path: /api/users/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-cluster-ip-srv
+                port:
+                  number: 3000
