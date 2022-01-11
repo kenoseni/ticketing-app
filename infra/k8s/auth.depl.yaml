@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  # number of pods you want to run
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  # template of each pod to be created
+  template:
+    metadata:
+      labels:
+        app: auth
+    # tell the pod how to behave
+    spec:
+      containers:
+        - name: auth
+          image: kenoseni/auth
