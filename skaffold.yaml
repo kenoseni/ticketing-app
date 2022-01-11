@@ -1,0 +1,20 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: kenoseni/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      # tell skaffold to watch the following files
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            # where to sync this file to inside our running container
+            dest: .
