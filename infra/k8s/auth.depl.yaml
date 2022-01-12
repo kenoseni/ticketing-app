@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: auth
-          image: kenoseni/auth
+          # local image: kenoseni/auth
+          image: gcr.io/ticketing-dev-338003/auth
 
 ---
 # Cluster IP service for pods created by deployments

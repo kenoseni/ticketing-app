@@ -10,7 +10,8 @@ build:
   googleCloudBuild:
     projectId: ticketing-dev-338003
   artifacts:
-    - image: us.gcr.io/ticketing-dev-338003/auth
+    # # local image: kenoseni/auth
+    - image: gcr.io/ticketing-dev-338003/auth
       context: auth
       docker:
         dockerfile: Dockerfile
