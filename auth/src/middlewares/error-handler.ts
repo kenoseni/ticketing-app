@@ -12,7 +12,7 @@ export const errorHandler = (
     // const formattedErrors = err.errors.map((error) => {
     //   return { message: error.msg, field: error.param };
     // });
-    res.status(err.statusCode).json({ errors: err.serializeErrors() });
+    return res.status(err.statusCode).json({ errors: err.serializeErrors() });
   }
 
   // if (err instanceof DatabaseConnectionError) {
