@@ -19,6 +19,12 @@ spec:
         - name: auth
           # local image: kenoseni/auth
           image: gcr.io/ticketing-dev-338003/auth
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
 
 ---
 # Cluster IP service for pods created by deployments
@@ -32,7 +38,7 @@ spec:
   selector:
     app: auth
   ports:
-  - name:  auth
-    port:  3000
-    targetPort: 3000
-    protocol: TCP
+    - name: auth
+      port: 3000
+      targetPort: 3000
+      protocol: TCP

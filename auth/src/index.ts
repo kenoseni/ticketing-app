@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(
   cookieSession({
     signed: false,
-    secure: true,
+    // secure: true,
   })
 );
 
@@ -33,6 +33,9 @@ app.all("*", async () => {
 app.use(errorHandler);
 
 const connectAndStart = async () => {
+  if (!process.env.JWT_KEY) {
+    throw new Error("JWT_KEY must be defined");
+  }
   try {
     await mongoose.connect("mongodb://auth-mongo-cluster-ip-srv:27017/auth");
     console.log("Connected to Mongodb");
