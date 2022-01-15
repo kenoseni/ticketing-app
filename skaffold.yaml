@@ -10,6 +10,16 @@ build:
   googleCloudBuild:
     projectId: ticketing-dev-338003
   artifacts:
+    - image: gcr.io/ticketing-dev-338003/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*.js"
+            # where to sync this file to inside our running container
+            dest: ./
+
     # # local image: kenoseni/auth
     - image: gcr.io/ticketing-dev-338003/auth
       context: auth
@@ -18,6 +28,6 @@ build:
       # tell skaffold to watch the following files
       sync:
         manual:
-          - src: 'src/**/*.ts'
+          - src: "src/**/*.ts"
             # where to sync this file to inside our running container
-            dest: .
+            dest: ./
