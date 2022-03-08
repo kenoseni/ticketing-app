@@ -1,10 +1,11 @@
 import "bootstrap/dist/css/bootstrap.css";
 import buildClient from "../api/build-client";
+import { Header } from "../components/Header";
 
 function TicketingApp({ Component, pageProps, currentUser }) {
   return (
     <div>
-      {currentUser.email}
+      <Header currentUser={currentUser} />
       <Component {...pageProps} />
     </div>
   );
