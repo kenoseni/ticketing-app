@@ -31,3 +31,15 @@ build:
           - src: "src/**/*.ts"
             # where to sync this file to inside our running container
             dest: ./
+
+    #local image: kenoseni/tickets
+    - image: gcr.io/ticketing-dev-338003/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      # tell skaffold to watch the following files
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            # where to sync this file to inside our running container
+            dest: ./

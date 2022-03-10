@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: tickets-depl
 spec:
   # number of pods you want to run
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: tickets
   # template of each pod to be created
   template:
     metadata:
       labels:
-        app: auth
+        app: tickets
     # tell the pod how to behave
     spec:
       containers:
-        - name: auth
-          # local image: kenoseni/auth
-          image: gcr.io/ticketing-dev-338003/auth
+        - name: tickets
+          # local image: kenoseni/tickets
+          image: gcr.io/ticketing-dev-338003/tickets
           env:
             - name: MONGO_URI
-              value: "mongodb://auth-mongo-cluster-ip-srv:27017/auth"
+              value: "mongodb://tickets-mongo-cluster-ip-srv/tickets"
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -33,14 +33,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-cluster-ip-srv
+  name: tickets-cluster-ip-srv
 # what pods to find and its governance
 spec:
   type: ClusterIP
   selector:
-    app: auth
+    app: tickets
   ports:
-    - name: auth
+    - name: tickets
       port: 3000
       targetPort: 3000
       protocol: TCP
