@@ -16,7 +16,7 @@ beforeAll(async () => {
   const mongoUri = mongo.getUri();
 
   await mongoose.connect(mongoUri);
-});
+}, 60000);
 
 beforeEach(async () => {
   const collections = await mongoose.connection.db.collections();
@@ -34,7 +34,7 @@ afterAll(async () => {
 global.signup = async () => {
   // Build a JWT payload. {id, email}
   const payload = {
-    id: "1lk24j124l",
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
   };
 
