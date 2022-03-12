@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { requireAuth, validateRequest } from "@sage-mode/common";
 import { body } from "express-validator";
 import { Ticket } from "../models/ticket";
+import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -24,6 +26,19 @@ router.post(
       userId: req.currentUser!.id,
     });
     await ticket.save();
+
+    const publisher = new TicketCreatedPublisher(natsWrapper.client);
+
+    try {
+      await publisher.publish({
+        id: ticket.id,
+        title: ticket.title,
+        price: ticket.price,
+        userId: ticket.userId,
+      });
+    } catch (err) {
+      console.error(err);
+    }
 
     res.status(201).send(ticket);
   }
