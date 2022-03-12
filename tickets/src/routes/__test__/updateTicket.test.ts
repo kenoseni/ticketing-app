@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import mongoose from "mongoose";
+import { natsWrapper } from "../../nats-wrapper";
 
 const createTicket = async () => {
   const title = "A first title";
@@ -91,6 +92,7 @@ it("updates the ticket provide inputs are valid", async () => {
     .set("Cookie", cookie)
     .send({ title, price: 40 })
     .expect(200);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 
   const ticketResponse = await request(app)
     .get(`/api/tickets/${response.body.id}`)
