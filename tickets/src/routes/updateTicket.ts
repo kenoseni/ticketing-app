@@ -7,6 +7,8 @@ import {
   NotAuthorizedError,
 } from "@sage-mode/common";
 import { Ticket } from "../models/ticket";
+import { TicketUpdatedPublisher } from "../events/publishers/ticket-updated-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -37,6 +39,17 @@ router.put(
       price,
     });
     await ticket.save();
+    const publisher = new TicketUpdatedPublisher(natsWrapper.client);
+    try {
+      await publisher.publish({
+        id: ticket.id,
+        title: ticket.title,
+        price: ticket.price,
+        userId: ticket.userId,
+      });
+    } catch (err) {
+      console.error(err);
+    }
     res.send(ticket);
   }
 );
