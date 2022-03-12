@@ -27,6 +27,8 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+            - name: NATS_SERVER_URI
+              value: "http://nats-cluster-ip-srv:4222"
 
 ---
 # Cluster IP service for pods created by deployments
