@@ -29,6 +29,12 @@ spec:
                   key: JWT_KEY
             - name: NATS_SERVER_URI
               value: "http://nats-cluster-ip-srv:4222"
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
 
 ---
 # Cluster IP service for pods created by deployments
