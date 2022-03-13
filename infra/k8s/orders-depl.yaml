@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-depl
+spec:
+  # number of pods you want to run
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders
+  # template of each pod to be created
+  template:
+    metadata:
+      labels:
+        app: orders
+    # tell the pod how to behave
+    spec:
+      containers:
+        - name: orders
+          # local image: kenoseni/orders
+          image: gcr.io/ticketing-dev-338003/orders
+          env:
+            - name: MONGO_URI
+              value: "mongodb://orders-mongo-cluster-ip-srv/orders"
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: NATS_SERVER_URI
+              value: "http://nats-cluster-ip-srv:4222"
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+# Cluster IP service for pods created by deployments
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-cluster-ip-srv
+# what pods to find and its governance
+spec:
+  type: ClusterIP
+  selector:
+    app: orders
+  ports:
+    - name: orders
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
