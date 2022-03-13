@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { randomBytes } from "crypto";
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
 
@@ -13,10 +12,16 @@ const connectAndStart = async () => {
   if (!process.env.NATS_SERVER_URI) {
     throw new Error("NATS_SERVER_URI must be defined");
   }
+  if (!process.env.NATS_CLUSTER_ID) {
+    throw new Error("NATS_CLUSTER_ID must be defined");
+  }
+  if (!process.env.NATS_CLIENT_ID) {
+    throw new Error("NATS_CLIENT_ID must be defined");
+  }
   try {
     await natsWrapper.connect(
-      "ticketing",
-      randomBytes(4).toString("hex"),
+      process.env.NATS_CLUSTER_ID,
+      process.env.NATS_CLIENT_ID,
       process.env.NATS_SERVER_URI
     );
     natsWrapper.client.on("close", () => {
