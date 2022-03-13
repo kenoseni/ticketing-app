@@ -55,3 +55,5 @@ it("returns reserves a ticket", async () => {
     });
   expect(response.status).toEqual(201);
 });
+
+it.todo("emits an order created events");
